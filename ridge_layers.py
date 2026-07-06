@@ -73,9 +73,7 @@ def fit_layer(layer_idx, Y_train_z, Y_test_z):
     slices = [slice(0, n_components), slice(n_components, 2*n_components)]
     kernelizers = [(name, Kernelizer(), sl) for name, sl in zip(['sem', 'prag'], slices)]
     column_kernelizer = ColumnKernelizer(kernelizers)
-    # solver_params = dict(alphas=np.logspace(0,20,10), n_iter=50, progress_bar=False)
     model = MultipleKernelRidgeCV(kernels='precomputed',solver_params=None,random_state=42)
-    # model = MultipleKernelRidgeCV(kernels='precomputed', solver='random_search', solver_params=solver_params, random_state=42)
     pipe = make_pipeline(column_kernelizer, model)
     pipe.fit(X_train.astype(np.float32), Y_train_z.astype(np.float32))
     y_pred_split = pipe.predict(X_test.astype(np.float32), split=True)
